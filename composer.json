@@ -1,0 +1,110 @@
+{
+    "name": "datlechin/flarum-passkey",
+    "description": "Sign in to Flarum with passkeys. Built on the W3C WebAuthn Level 3 standard.",
+    "type": "flarum-extension",
+    "keywords": [
+        "passkey",
+        "webauthn",
+        "fido2",
+        "authentication",
+        "security",
+        "passwordless"
+    ],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/datlechin/flarum-passkey/issues",
+        "source": "https://github.com/datlechin/flarum-passkey"
+    },
+    "homepage": "https://nqd.vn",
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/datlechin"
+        },
+        {
+            "type": "custom",
+            "url": "https://buymeacoffee.com/ngoquocdat"
+        }
+    ],
+    "authors": [
+        {
+            "name": "Ngo Quoc Dat",
+            "email": "datlechin@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "flarum/core": "^2.0",
+        "web-auth/webauthn-lib": "^5.3"
+    },
+    "require-dev": {
+        "flarum/testing": "^2.0",
+        "flarum/phpstan": "^2.0",
+        "flarum/gdpr": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Datlechin\\Passkey\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Datlechin\\Passkey\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        },
+        "flarum-extension": {
+            "title": "Passkey",
+            "category": "feature",
+            "optional-dependencies": [
+                "flarum/gdpr"
+            ],
+            "icon": {
+                "name": "fas fa-key",
+                "backgroundColor": "#7C3AED",
+                "color": "#fff"
+            }
+        },
+        "flarum-cli": {
+            "modules": {
+                "admin": true,
+                "forum": true,
+                "js": true,
+                "jsCommon": true,
+                "css": true,
+                "locale": true,
+                "gitConf": true,
+                "githubActions": true,
+                "prettier": true,
+                "typescript": true,
+                "bundlewatch": false,
+                "frontendTesting": false,
+                "backendTesting": true,
+                "phpstan": true,
+                "editorConfig": true,
+                "styleci": true
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "test": [
+            "@test:integration"
+        ],
+        "test:integration": "phpunit -c tests/phpunit.integration.xml",
+        "test:setup": "@php tests/integration/setup.php",
+        "analyse:phpstan": "phpstan analyse",
+        "clear-cache:phpstan": "phpstan clear-result-cache"
+    },
+    "scripts-descriptions": {
+        "test": "Runs all tests.",
+        "test:integration": "Runs all integration tests.",
+        "test:setup": "Sets up a database for use with integration tests. Execute this only once.",
+        "analyse:phpstan": "Run static analysis"
+    }
+}

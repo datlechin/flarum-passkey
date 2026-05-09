@@ -1,0 +1,116 @@
+// Visual treatment for the passkey list. Mirrors the structure of
+// `AccessTokensList` so passkeys feel native on the user security page, but
+// declared under our own class taxonomy so the rules can evolve independently.
+//
+// All values reference Flarum design-system custom properties; nothing is
+// hard-coded so light/dark themes and forum brand colors apply automatically.
+
+.PasskeyList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 16px;
+
+  &-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 16px 16px 0;
+    background-color: var(--control-bg);
+    color: var(--control-color);
+    border-radius: var(--border-radius);
+
+    &-icon {
+      --passkey-icon-size: 1.6rem;
+      font-size: var(--passkey-icon-size);
+      width: calc(~"var(--passkey-icon-size) + 4rem");
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    &-title {
+      font-weight: bold;
+
+      &-main {
+        font-weight: bold;
+      }
+
+      &-sub {
+        font-style: italic;
+        font-weight: normal;
+        color: var(--muted-color);
+      }
+    }
+
+    &-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 12px;
+      font-size: 13px;
+      color: var(--muted-color);
+
+      strong {
+        font-weight: 600;
+        color: var(--control-color);
+      }
+    }
+
+    &-actions {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      flex-shrink: 0;
+
+      > *:not(:first-child) {
+        margin-left: 8px;
+      }
+    }
+  }
+
+  &-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  &--empty {
+    color: var(--muted-color);
+  }
+}
+
+
+@media @phone {
+  .PasskeyList {
+    &-item {
+      flex-wrap: wrap;
+      padding: 16px;
+      align-items: flex-start;
+
+      &-icon {
+        justify-content: flex-start;
+        padding-right: 8px;
+        width: auto;
+        min-width: calc(~"var(--passkey-icon-size) + 2rem");
+      }
+
+      &-actions {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 12px;
+        justify-content: flex-end;
+      }
+    }
+  }
+}

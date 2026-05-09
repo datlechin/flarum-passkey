@@ -1,0 +1,142 @@
+datlechin-passkey:
+  forum:
+    log_in:
+      sign_in_with_passkey: Đăng nhập bằng passkey
+      passkey_unsupported: Trình duyệt này chưa hỗ trợ passkey.
+      verifying: Đang xác thực passkey...
+      cancelled: Bạn đã hủy đăng nhập bằng passkey.
+      failed: Không xác thực được passkey. Vui lòng thử lại.
+      unsupported: Thiết bị này không dùng được loại passkey site yêu cầu.
+      security_error: Origin của site không khớp với relying party đã cấu hình. Liên hệ quản trị viên kiểm tra cài đặt Passkey.
+      throttled: Bạn đã thử quá nhiều lần. Vui lòng chờ một phút rồi thử lại.
+
+    suggest:
+      title: Thiết lập passkey
+      body: Đăng nhập nhanh hơn lần sau, không cần nhớ mật khẩu. Thiết bị của bạn tạo passkey chỉ dùng cho site này.
+      set_up: Thiết lập passkey
+      not_now: Để sau
+
+    required:
+      body: Vai trò của bạn yêu cầu phải đăng ký passkey để tiếp tục.
+      set_up: Thiết lập ngay
+
+    settings:
+      heading: Passkey
+      description: Passkey cho phép bạn đăng nhập không cần mật khẩu, dùng thiết bị hoặc khóa cứng.
+      add_button: Thêm passkey
+      bulk_revoke_button: Thu hồi tất cả
+      add_modal:
+        title: Thêm passkey
+        device_name_label: Đặt tên cho passkey
+        device_name_placeholder: ví dụ iPhone, MacBook, YubiKey
+        register_button: Đăng ký
+        cancel_button: Hủy
+      bulk_revoke_modal:
+        body: "Thu hồi cả {count} passkey? Sau đó bạn sẽ không đăng nhập bằng passkey nào được nữa."
+      list:
+        empty: Bạn chưa thêm passkey nào.
+        added_label: Thêm vào
+        last_used_label: Lần dùng cuối
+        never_used: Chưa dùng
+        synced: Đã đồng bộ
+        device_only: Chỉ trên thiết bị này
+        rename_button: Đổi tên
+        revoke_button: Thu hồi
+      rename_modal:
+        title: Đổi tên passkey
+        save_button: Lưu
+        cancel_button: Hủy
+      revoke_modal:
+        title: Thu hồi passkey
+        body: "Bạn có chắc muốn thu hồi {device}? Sau đó bạn sẽ không đăng nhập bằng passkey này được nữa."
+        confirm_button: Thu hồi
+        cancel_button: Hủy
+      alerts:
+        registration_succeeded: Đã thêm passkey.
+        registration_failed: Không đăng ký được passkey. Vui lòng thử lại.
+        registration_already_exists: Thiết bị này đã có passkey cho tài khoản của bạn rồi. Hãy thu hồi passkey hiện có trước, hoặc dùng thiết bị khác.
+        registration_security_error: Origin của site không khớp với relying party đã cấu hình. Liên hệ quản trị viên kiểm tra cài đặt Passkey.
+        registration_unsupported: Thiết bị này không tạo được passkey theo cấu hình site yêu cầu.
+        rename_succeeded: Đã đổi tên passkey.
+        revoke_succeeded: Đã thu hồi passkey.
+        bulk_revoke_succeeded: Đã thu hồi tất cả passkey.
+
+  gdpr:
+    export_description: Bao gồm nhãn thiết bị, thời điểm dùng cuối, IP và metadata authenticator của từng passkey. Khóa công khai chỉ để nhận dạng credential, không dùng để giả mạo đăng nhập.
+    anonymize_description: Tất cả passkey của user này được thu hồi.
+    delete_description: Tất cả passkey của user này được xóa.
+
+  email:
+    revoked:
+      subject: "Một passkey đã bị gỡ khỏi tài khoản {forum} của bạn"
+      body: |
+        Chào {username},
+
+        Passkey "{device}" vừa bị gỡ khỏi tài khoản của bạn trên {forum}. {actor}
+
+        Nếu không phải bạn làm việc này, tài khoản có thể đang bị nguy hiểm. Hãy đăng nhập và kiểm tra danh sách passkey còn lại ở tab bảo mật. Nếu bạn không vào được tài khoản, dùng link đặt lại mật khẩu ở màn hình đăng nhập.
+
+        {forum}
+      actor_self: Bạn đã chủ động thu hồi từ tab bảo mật.
+      actor_admin: Một quản trị viên đã thu hồi giúp bạn.
+
+    counter_regression:
+      subject: "Có dấu hiệu clone passkey trên tài khoản {forum} của bạn"
+      body: |
+        Chào {username},
+
+        Một lần đăng nhập vào {forum} bằng passkey "{device}" vừa bị từ chối vì credential báo về signature counter thấp hơn giá trị đã lưu. Đây là tín hiệu đặc trưng cho thấy credential có thể đã bị sao chép sang thiết bị khác.
+
+        Lần đăng nhập đó đã bị chặn. Khuyên bạn đăng nhập bằng mật khẩu, thu hồi passkey này và đăng ký passkey mới. Nếu các thiết bị khác đang dùng credential này, hãy xóa khỏi password manager.
+
+        {forum}
+
+    backup_state:
+      subject: "Trạng thái đồng bộ passkey trên {forum} đã thay đổi"
+      body: |
+        Chào {username},
+
+        Passkey "{device}" trên {forum} hiện đang {state}.
+
+        Nếu chính bạn vừa thực hiện (ví dụ đăng nhập iCloud Keychain hoặc password manager trên thiết bị mới), có thể bỏ qua thông báo này. Nếu không, hãy đăng nhập và kiểm tra tab bảo mật, có thể passkey đã bị sao chép sang thiết bị khác.
+
+        {forum}
+      synced: được đồng bộ lên cloud password manager
+      unsynced: chỉ lưu trên một thiết bị
+
+    bulk_revoked:
+      subject: "Tất cả passkey đã bị gỡ khỏi tài khoản {forum} của bạn"
+      body: |
+        Chào {username},
+
+        Cả {count} passkey vừa bị gỡ khỏi tài khoản của bạn trên {forum}. {actor}
+
+        Nếu không phải bạn làm việc này, hãy đăng nhập bằng mật khẩu và kiểm tra tab bảo mật. Nếu bạn không vào được tài khoản, dùng link đặt lại mật khẩu ở màn hình đăng nhập.
+
+        {forum}
+      actor_self: Bạn đã chủ động thu hồi từ tab bảo mật.
+      actor_admin: Một quản trị viên đã thu hồi giúp bạn.
+
+  admin:
+    settings:
+      title: Passkey
+      description: Cấu hình xác thực passkey cho diễn đàn.
+      rp_id_label: Relying Party ID
+      rp_id_help: Tên miền giới hạn passkey. Để trống để tự dò theo host của yêu cầu. Đổi giá trị sẽ làm tất cả passkey hiện có không còn hiệu lực.
+      rp_name_label: Tên hiển thị Relying Party
+      rp_name_help: Tên người dùng nhìn thấy trong cửa sổ chọn passkey của trình duyệt. Mặc định lấy theo tên diễn đàn.
+      related_origins_label: Origin liên quan (mỗi dòng một origin)
+      related_origins_help: Các origin khác được phép chạy nghi thức passkey. Đi kèm với tài liệu W3C related-origins ở /.well-known/webauthn.
+      user_verification_label: Xác minh người dùng
+      user_verification_required: Bắt buộc (luôn yêu cầu sinh trắc hoặc PIN)
+      user_verification_preferred: Ưu tiên (yêu cầu nếu thiết bị hỗ trợ)
+      user_verification_discouraged: Không khuyến nghị (chỉ chạm, kém an toàn)
+      attestation_label: Mức attestation
+      attestation_none: Không (khuyên dùng)
+      attestation_indirect: Gián tiếp
+      attestation_direct: Trực tiếp
+      throttle_label: Số lần đăng nhập mỗi phút trên mỗi IP
+
+    group_modal:
+      require_passkey: Bắt buộc passkey cho nhóm này
+      require_passkey_help: Thành viên sẽ thấy banner nhắc nhở cho đến khi đăng ký ít nhất một passkey.
