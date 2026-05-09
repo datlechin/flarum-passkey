@@ -13,7 +13,8 @@
     "license": "MIT",
     "support": {
         "issues": "https://github.com/datlechin/flarum-passkey/issues",
-        "source": "https://github.com/datlechin/flarum-passkey"
+        "source": "https://github.com/datlechin/flarum-passkey",
+        "forum": "https://discuss.flarum.org/d/39230"
     },
     "homepage": "https://nqd.vn",
     "funding": [
