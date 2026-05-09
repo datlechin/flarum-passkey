@@ -34,7 +34,7 @@ Built on W3C WebAuthn Level 3 with [`web-auth/webauthn-lib`](https://github.com/
 
 ![Passkeys section on the user security tab](screenshots/passkeys-list.png)
 
-| | |
+| Add passkey modal | Suggest passkey after a password sign-in |
 |---|---|
 | ![Add passkey modal](screenshots/add-passkey-modal.png) | ![Suggest passkey after a password sign-in](screenshots/suggest-modal.png) |
 
