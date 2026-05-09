@@ -152,5 +152,6 @@ If this extension is useful to you, you can sponsor the work via [GitHub Sponsor
 
 - [Packagist](https://packagist.org/packages/datlechin/flarum-passkey)
 - [GitHub](https://github.com/datlechin/flarum-passkey)
+- [Discuss](https://discuss.flarum.org/d/39230)
 - [W3C WebAuthn Level 3](https://www.w3.org/TR/webauthn-3/)
 - [FIDO Alliance Passkeys](https://fidoalliance.org/passkeys/)
