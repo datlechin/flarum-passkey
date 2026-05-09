@@ -34,7 +34,7 @@ class SendBackupStatusChangedEmail
     public function handle(BackupStatusChangedEvent $event): void
     {
         $passkey = Passkey::query()
-            ->where('credential_id', $event->credentialRecord->publicKeyCredentialId)
+            ->where('credential_id', Passkey::base64UrlEncode($event->credentialRecord->publicKeyCredentialId))
             ->with('user')
             ->first();
 

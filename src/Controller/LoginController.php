@@ -78,7 +78,7 @@ class LoginController implements RequestHandlerInterface
             throw new PasskeyVerificationException('Expected an assertion response.');
         }
 
-        $credentialId = $publicKeyCredential->rawId;
+        $credentialId = Passkey::base64UrlEncode($publicKeyCredential->rawId);
 
         $passkey = Passkey::where('credential_id', $credentialId)->first();
         if ($passkey === null) {

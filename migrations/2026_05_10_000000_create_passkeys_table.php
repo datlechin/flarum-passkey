@@ -16,10 +16,11 @@ return Migration::createTable('passkeys', function (Blueprint $table) {
     $table->bigIncrements('id');
     $table->unsignedInteger('user_id');
 
-    // Raw binary credential ID. WebAuthn credentialId can be 16 - 1023 bytes,
-    // so we need a column wide enough; LONGBLOB on MySQL handles up to 4 GiB.
-    $table->binary('credential_id');
-    $table->binary('public_key_cose');
+    // base64url-encoded WebAuthn artefacts. Storing as VARCHAR/TEXT keeps the
+    // schema portable across MySQL, MariaDB, SQLite and Postgres without the
+    // PDO binary-binding gymnastics that BYTEA requires.
+    $table->string('credential_id', 1500);
+    $table->text('public_key_cose');
 
     // 32-bit unsigned counter from the authenticator. We store as unsigned 64-bit
     // to leave headroom for any future encoding changes.
@@ -51,10 +52,6 @@ return Migration::createTable('passkeys', function (Blueprint $table) {
     $table->timestamps();
 
     $table->index('user_id');
+    $table->unique('credential_id');
     $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
-
-    // The unique index on `credential_id` is added in
-    // 2026_05_10_000002_unique_credential_id.php — MySQL requires an explicit
-    // key prefix length on BLOB columns and Laravel's Blueprint does not
-    // expose that, so the constraint is added with a raw ALTER statement.
 });

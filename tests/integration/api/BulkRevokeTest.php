@@ -119,7 +119,7 @@ class BulkRevokeTest extends TestCase
             'id' => $id,
             'user_id' => $userId,
             'credential_id' => "cred-{$id}",
-            'public_key_cose' => random_bytes(32),
+            'public_key_cose' => 'a3JleS1ieXRlcw',
             'signature_count' => 0,
             'transports' => '["internal"]',
             'aaguid' => '00000000-0000-0000-0000-000000000000',

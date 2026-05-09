@@ -40,8 +40,8 @@ class ListPasskeysTest extends TestCase
                 [
                     'id' => 1,
                     'user_id' => 2,
-                    'credential_id' => random_bytes(32),
-                    'public_key_cose' => random_bytes(64),
+                    'credential_id' => 'cred-mac-1234567890abcdef',
+                    'public_key_cose' => 'a3JleS1ieXRlcy1hbGljZQ',
                     'signature_count' => 0,
                     'transports' => '["internal"]',
                     'aaguid' => '00000000-0000-0000-0000-000000000000',
@@ -56,8 +56,8 @@ class ListPasskeysTest extends TestCase
                 [
                     'id' => 2,
                     'user_id' => 3,
-                    'credential_id' => random_bytes(32),
-                    'public_key_cose' => random_bytes(64),
+                    'credential_id' => 'cred-iphone-fedcba0987654321',
+                    'public_key_cose' => 'a3JleS1ieXRlcy1ib2I',
                     'signature_count' => 0,
                     'transports' => '["internal"]',
                     'aaguid' => '00000000-0000-0000-0000-000000000000',

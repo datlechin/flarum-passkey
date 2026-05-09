@@ -102,8 +102,8 @@ class RegistrationController implements RequestHandlerInterface
         $passkey = $this->db->transaction(function () use ($credentialRecord, $actor, $deviceName, $request) {
             $passkey = new Passkey;
             $passkey->user_id = $actor->id;
-            $passkey->credential_id = $credentialRecord->publicKeyCredentialId;
-            $passkey->public_key_cose = $credentialRecord->credentialPublicKey;
+            $passkey->credential_id = Passkey::base64UrlEncode($credentialRecord->publicKeyCredentialId);
+            $passkey->public_key_cose = Passkey::base64UrlEncode($credentialRecord->credentialPublicKey);
             $passkey->signature_count = $credentialRecord->counter;
             $passkey->transports = $credentialRecord->transports;
             $passkey->aaguid = $credentialRecord->aaguid->toRfc4122();

@@ -51,10 +51,13 @@ class PasskeyModelTest extends TestCase
     #[Test]
     public function to_credential_record_round_trip(): void
     {
+        $rawCredentialId = random_bytes(32);
+        $rawPublicKey = random_bytes(64);
+
         $passkey = new Passkey();
         $passkey->user_id = 42;
-        $passkey->credential_id = random_bytes(32);
-        $passkey->public_key_cose = random_bytes(64);
+        $passkey->credential_id = Passkey::base64UrlEncode($rawCredentialId);
+        $passkey->public_key_cose = Passkey::base64UrlEncode($rawPublicKey);
         $passkey->signature_count = 7;
         $passkey->transports = ['internal', 'hybrid'];
         $passkey->aaguid = '550e8400-e29b-41d4-a716-446655440000';
@@ -65,8 +68,8 @@ class PasskeyModelTest extends TestCase
 
         $record = $passkey->toCredentialRecord();
 
-        $this->assertSame($passkey->credential_id, $record->publicKeyCredentialId);
-        $this->assertSame($passkey->public_key_cose, $record->credentialPublicKey);
+        $this->assertSame($rawCredentialId, $record->publicKeyCredentialId);
+        $this->assertSame($rawPublicKey, $record->credentialPublicKey);
         $this->assertSame(7, $record->counter);
         $this->assertSame(['internal', 'hybrid'], $record->transports);
         $this->assertSame('packed', $record->attestationType);

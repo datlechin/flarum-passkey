@@ -23,8 +23,8 @@ use Webauthn\TrustPath\EmptyTrustPath;
 /**
  * @property int $id
  * @property int $user_id
- * @property string $credential_id Raw binary credential id
- * @property string $public_key_cose Raw COSE-encoded public key
+ * @property string $credential_id base64url-encoded WebAuthn credential id
+ * @property string $public_key_cose base64url-encoded COSE public key
  * @property int $signature_count
  * @property string[] $transports
  * @property string|null $aaguid
@@ -83,13 +83,13 @@ class Passkey extends AbstractModel
     public function toCredentialRecord(): CredentialRecord
     {
         return new CredentialRecord(
-            publicKeyCredentialId: $this->credential_id,
+            publicKeyCredentialId: self::base64UrlDecode($this->credential_id),
             type: 'public-key',
             transports: $this->transports ?? [],
             attestationType: $this->attestation_format,
             trustPath: new EmptyTrustPath(),
             aaguid: $this->aaguid !== null ? Uuid::fromString($this->aaguid) : Uuid::fromString('00000000-0000-0000-0000-000000000000'),
-            credentialPublicKey: $this->public_key_cose,
+            credentialPublicKey: self::base64UrlDecode($this->public_key_cose),
             userHandle: (string) $this->user_id,
             counter: $this->signature_count,
             backupEligible: $this->backup_eligible,
@@ -108,7 +108,7 @@ class Passkey extends AbstractModel
 
     public function getProviderIdentifier(): string
     {
-        return self::base64UrlEncode($this->credential_id);
+        return $this->credential_id;
     }
 
     public static function base64UrlEncode(string $raw): string
