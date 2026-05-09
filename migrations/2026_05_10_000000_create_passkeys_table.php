@@ -19,7 +19,11 @@ return Migration::createTable('passkeys', function (Blueprint $table) {
     // base64url-encoded WebAuthn artefacts. Storing as VARCHAR/TEXT keeps the
     // schema portable across MySQL, MariaDB, SQLite and Postgres without the
     // PDO binary-binding gymnastics that BYTEA requires.
-    $table->string('credential_id', 1500);
+    //
+    // ASCII charset is honest (base64url is ASCII by spec) and keeps the unique
+    // index under MySQL's 3072-byte InnoDB key limit; Postgres and SQLite ignore
+    // the hint.
+    $table->string('credential_id', 1024)->charset('ascii')->collation('ascii_bin');
     $table->text('public_key_cose');
 
     // 32-bit unsigned counter from the authenticator. We store as unsigned 64-bit
