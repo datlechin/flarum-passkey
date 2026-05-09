@@ -16,20 +16,13 @@ import PasskeyList from '../components/PasskeyList';
  * {@link extend} hook the prototype once the chunk arrives.
  */
 export default function extendUserSecurityPage(): void {
-  extend(
-    'flarum/forum/components/UserSecurityPage',
-    'settingsItems',
-    function (this: UserSecurityPage, items: ItemList<Mithril.Children>) {
-      items.add(
-        'datlechin-passkeys',
-        <FieldSet
-          className="UserSecurityPage-passkeys"
-          label={app.translator.trans('datlechin-passkey.forum.settings.heading')}
-        >
-          <PasskeyList />
-        </FieldSet>,
-        90
-      );
-    }
-  );
+  extend('flarum/forum/components/UserSecurityPage', 'settingsItems', function (this: UserSecurityPage, items: ItemList<Mithril.Children>) {
+    items.add(
+      'datlechin-passkeys',
+      <FieldSet className="UserSecurityPage-passkeys" label={app.translator.trans('datlechin-passkey.forum.settings.heading')}>
+        <PasskeyList />
+      </FieldSet>,
+      90
+    );
+  });
 }

@@ -45,13 +45,7 @@ export default class RenamePasskeyModal extends FormModal<IRenamePasskeyModalAtt
     fields.add(
       'name',
       <div className="Form-group">
-        <input
-          className="FormControl"
-          bidi={this.name}
-          maxlength={64}
-          disabled={this.loading}
-          autofocus
-        />
+        <input className="FormControl" bidi={this.name} maxlength={64} disabled={this.loading} autofocus />
       </div>,
       30
     );
@@ -80,10 +74,7 @@ export default class RenamePasskeyModal extends FormModal<IRenamePasskeyModalAtt
     this.attrs.passkey
       .save({ deviceName: trimmed })
       .then(() => {
-        app.alerts.show(
-          { type: 'success' },
-          app.translator.trans('datlechin-passkey.forum.settings.alerts.rename_succeeded')
-        );
+        app.alerts.show({ type: 'success' }, app.translator.trans('datlechin-passkey.forum.settings.alerts.rename_succeeded'));
         this.attrs.onSuccess?.();
         this.hide();
       })

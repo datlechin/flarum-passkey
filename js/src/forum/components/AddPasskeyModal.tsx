@@ -5,12 +5,7 @@ import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
 import Stream from 'flarum/common/utils/Stream';
 import type Mithril from 'mithril';
-import {
-  fetchRegistrationOptions,
-  performRegistration,
-  submitRegistration,
-  PasskeyClientError,
-} from '../lib/webauthn';
+import { fetchRegistrationOptions, performRegistration, submitRegistration, PasskeyClientError } from '../lib/webauthn';
 
 export interface IAddPasskeyModalAttrs extends IFormModalAttrs {
   onSuccess?: () => void;
@@ -46,15 +41,11 @@ export default class AddPasskeyModal extends FormModal<IAddPasskeyModalAttrs> {
     fields.add(
       'deviceName',
       <div className="Form-group">
-        <label htmlFor="passkey-device-name">
-          {app.translator.trans('datlechin-passkey.forum.settings.add_modal.device_name_label')}
-        </label>
+        <label htmlFor="passkey-device-name">{app.translator.trans('datlechin-passkey.forum.settings.add_modal.device_name_label')}</label>
         <input
           id="passkey-device-name"
           className="FormControl"
-          placeholder={app.translator.trans(
-            'datlechin-passkey.forum.settings.add_modal.device_name_placeholder'
-          ) as string}
+          placeholder={app.translator.trans('datlechin-passkey.forum.settings.add_modal.device_name_placeholder') as string}
           bidi={this.deviceName}
           maxlength={64}
           disabled={this.loading}
@@ -90,10 +81,7 @@ export default class AddPasskeyModal extends FormModal<IAddPasskeyModalAttrs> {
       await submitRegistration(credential, trimmed);
     })()
       .then(() => {
-        app.alerts.show(
-          { type: 'success' },
-          app.translator.trans('datlechin-passkey.forum.settings.alerts.registration_succeeded')
-        );
+        app.alerts.show({ type: 'success' }, app.translator.trans('datlechin-passkey.forum.settings.alerts.registration_succeeded'));
         this.attrs.onSuccess?.();
         this.hide();
       })
@@ -131,8 +119,7 @@ export default class AddPasskeyModal extends FormModal<IAddPasskeyModalAttrs> {
 
     if (data) {
       const platform = data.platform ?? '';
-      const browser = data.brands.find((b) => /Chrome|Edge|Opera|Brave/i.test(b.brand))?.brand
-        ?? data.brands[0]?.brand ?? '';
+      const browser = data.brands.find((b) => /Chrome|Edge|Opera|Brave/i.test(b.brand))?.brand ?? data.brands[0]?.brand ?? '';
       const friendlyBrowser = browser.replace(/^Google /, '').replace(/Microsoft /, '');
 
       if (data.mobile && platform === 'Android') return browserOn(friendlyBrowser, 'Android');
@@ -144,12 +131,18 @@ export default class AddPasskeyModal extends FormModal<IAddPasskeyModalAttrs> {
 
     const ua = navigator.userAgent;
 
-    const browser = /Edg\//.test(ua) ? 'Edge'
-      : /Firefox\//.test(ua) ? 'Firefox'
-      : /CriOS\//.test(ua) ? 'Chrome'
-      : /OPR\/|Opera/.test(ua) ? 'Opera'
-      : /Chrome\//.test(ua) ? 'Chrome'
-      : /Safari\//.test(ua) ? 'Safari'
+    const browser = /Edg\//.test(ua)
+      ? 'Edge'
+      : /Firefox\//.test(ua)
+      ? 'Firefox'
+      : /CriOS\//.test(ua)
+      ? 'Chrome'
+      : /OPR\/|Opera/.test(ua)
+      ? 'Opera'
+      : /Chrome\//.test(ua)
+      ? 'Chrome'
+      : /Safari\//.test(ua)
+      ? 'Safari'
       : '';
 
     let device = '';

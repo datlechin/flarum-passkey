@@ -2,13 +2,7 @@ import app from 'flarum/forum/app';
 import Component, { ComponentAttrs } from 'flarum/common/Component';
 import Button from 'flarum/common/components/Button';
 import type Mithril from 'mithril';
-import {
-  fetchLoginOptions,
-  performAuthentication,
-  submitLogin,
-  isSupported,
-  PasskeyClientError,
-} from '../lib/webauthn';
+import { fetchLoginOptions, performAuthentication, submitLogin, isSupported, PasskeyClientError } from '../lib/webauthn';
 
 export interface IPasskeyLoginButtonAttrs extends ComponentAttrs {
   className?: string;

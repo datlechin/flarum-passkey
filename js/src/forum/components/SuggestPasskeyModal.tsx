@@ -36,22 +36,14 @@ export default class SuggestPasskeyModal extends Modal<ISuggestPasskeyModalAttrs
     return (
       <div className="Modal-body">
         <div className="Form Form--centered">
-          <p className="helpText">
-            {app.translator.trans('datlechin-passkey.forum.suggest.body')}
-          </p>
+          <p className="helpText">{app.translator.trans('datlechin-passkey.forum.suggest.body')}</p>
           <div className="Form-group Form-controls">
-            <Button
-              className="Button Button--primary Button--block"
-              onclick={this.setUp.bind(this)}
-            >
+            <Button className="Button Button--primary Button--block" onclick={this.setUp.bind(this)}>
               {app.translator.trans('datlechin-passkey.forum.suggest.set_up')}
             </Button>
           </div>
           <div className="Form-group">
-            <Button
-              className="Button Button--text Button--link"
-              onclick={() => this.hide()}
-            >
+            <Button className="Button Button--text Button--link" onclick={() => this.hide()}>
               {app.translator.trans('datlechin-passkey.forum.suggest.not_now')}
             </Button>
           </div>

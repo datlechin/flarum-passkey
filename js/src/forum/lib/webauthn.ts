@@ -1,9 +1,4 @@
-import {
-  startAuthentication,
-  startRegistration,
-  browserSupportsWebAuthn,
-  browserSupportsWebAuthnAutofill,
-} from '@simplewebauthn/browser';
+import { startAuthentication, startRegistration, browserSupportsWebAuthn, browserSupportsWebAuthnAutofill } from '@simplewebauthn/browser';
 import type {
   PublicKeyCredentialCreationOptionsJSON,
   PublicKeyCredentialRequestOptionsJSON,
@@ -21,12 +16,7 @@ import app from 'flarum/forum/app';
  */
 export class PasskeyClientError extends Error {
   constructor(
-    public readonly kind:
-      | 'unsupported'
-      | 'cancelled'
-      | 'invalid_state'
-      | 'security'
-      | 'unknown',
+    public readonly kind: 'unsupported' | 'cancelled' | 'invalid_state' | 'security' | 'unknown',
     message: string,
     public readonly cause?: unknown
   ) {
@@ -94,10 +84,7 @@ export async function performAuthentication(
   }
 }
 
-export async function submitLogin(
-  credential: AuthenticationResponseJSON,
-  remember = true
-): Promise<{ token: string; userId: number }> {
+export async function submitLogin(credential: AuthenticationResponseJSON, remember = true): Promise<{ token: string; userId: number }> {
   return app.request({
     method: 'POST',
     url: app.forum.attribute('apiUrl') + '/passkey/login',

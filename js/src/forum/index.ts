@@ -2,10 +2,7 @@ import app from 'flarum/forum/app';
 import extendLogInModal from './extenders/extendLogInModal';
 import extendUserSecurityPage from './extenders/extendUserSecurityPage';
 import setupConditionalUi from './extenders/conditionalUiBootstrap';
-import {
-  patchSessionForConditionalCreate,
-  checkConditionalCreate,
-} from './extenders/conditionalCreateBootstrap';
+import { patchSessionForConditionalCreate, checkConditionalCreate } from './extenders/conditionalCreateBootstrap';
 import enforceRequiredPasskey from './extenders/enforceRequiredPasskey';
 
 // Patch `Session.prototype.login` at module top level , before LogInModal

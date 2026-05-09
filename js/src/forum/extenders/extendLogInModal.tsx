@@ -15,11 +15,7 @@ import PasskeyLoginButton from '../components/PasskeyLoginButton';
  * module is registered.
  */
 export default function extendLogInModal(): void {
-  extend(
-    'flarum/forum/components/LogInButtons',
-    'items',
-    function (this: LogInButtons, items: ItemList<Mithril.Children>) {
-      items.add('datlechin-passkey', <PasskeyLoginButton />, 100);
-    }
-  );
+  extend('flarum/forum/components/LogInButtons', 'items', function (this: LogInButtons, items: ItemList<Mithril.Children>) {
+    items.add('datlechin-passkey', <PasskeyLoginButton />, 100);
+  });
 }

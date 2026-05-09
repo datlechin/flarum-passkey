@@ -17,30 +17,21 @@ import type Group from 'flarum/common/models/Group';
  * `group.save()` like every other field on this surface.
  */
 export default function extendEditGroupModal(): void {
-  extend(
-    'flarum/admin/components/EditGroupModal',
-    'oninit',
-    function (this: EditGroupModal & { passkeyRequired: Stream<boolean>; group: Group }) {
-      this.passkeyRequired = Stream(this.group.passkeyRequired() ?? false);
-    }
-  );
+  extend('flarum/admin/components/EditGroupModal', 'oninit', function (this: EditGroupModal & { passkeyRequired: Stream<boolean>; group: Group }) {
+    this.passkeyRequired = Stream(this.group.passkeyRequired() ?? false);
+  });
 
   extend(
     'flarum/admin/components/EditGroupModal',
     'fields',
-    function (
-      this: EditGroupModal & { passkeyRequired: Stream<boolean> },
-      items: ItemList<Mithril.Children>
-    ) {
+    function (this: EditGroupModal & { passkeyRequired: Stream<boolean> }, items: ItemList<Mithril.Children>) {
       items.add(
         'datlechin-passkey-required',
         <div className="Form-group">
           <Switch state={this.passkeyRequired()} onchange={this.passkeyRequired}>
             {app.translator.trans('datlechin-passkey.admin.group_modal.require_passkey')}
           </Switch>
-          <div className="helpText">
-            {app.translator.trans('datlechin-passkey.admin.group_modal.require_passkey_help')}
-          </div>
+          <div className="helpText">{app.translator.trans('datlechin-passkey.admin.group_modal.require_passkey_help')}</div>
         </div>,
         // Slot between the canonical "Hide on forum" Switch (priority 10)
         // and the submit row (-10) so the toggle stays inside the form area.
@@ -52,10 +43,7 @@ export default function extendEditGroupModal(): void {
   extend(
     'flarum/admin/components/EditGroupModal',
     'submitData',
-    function (
-      this: EditGroupModal & { passkeyRequired: Stream<boolean> },
-      data: Record<string, unknown>
-    ) {
+    function (this: EditGroupModal & { passkeyRequired: Stream<boolean> }, data: Record<string, unknown>) {
       data.passkeyRequired = this.passkeyRequired();
     }
   );

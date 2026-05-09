@@ -1,12 +1,6 @@
 import { extend } from 'flarum/common/extend';
 import type Mithril from 'mithril';
-import {
-  fetchLoginOptions,
-  performAuthentication,
-  submitLogin,
-  isAutofillSupported,
-  PasskeyClientError,
-} from '../lib/webauthn';
+import { fetchLoginOptions, performAuthentication, submitLogin, isAutofillSupported, PasskeyClientError } from '../lib/webauthn';
 
 /**
  * Wires up Conditional UI ("autofill") for passkey sign-in.
@@ -21,19 +15,13 @@ import {
  * functional and the user never sees an error from this code path.
  */
 export default function setupConditionalUi(): void {
-  extend(
-    'flarum/forum/components/LogInModal',
-    'oncreate',
-    function (_returnValue: void, ...args: unknown[]) {
-      const vnode = args[0] as Mithril.VnodeDOM;
-      const input = (vnode.dom as HTMLElement).querySelector<HTMLInputElement>(
-        'input[name="identification"]'
-      );
-      if (!input) return;
+  extend('flarum/forum/components/LogInModal', 'oncreate', function (_returnValue: void, ...args: unknown[]) {
+    const vnode = args[0] as Mithril.VnodeDOM;
+    const input = (vnode.dom as HTMLElement).querySelector<HTMLInputElement>('input[name="identification"]');
+    if (!input) return;
 
-      attach(input).catch(() => {});
-    }
-  );
+    attach(input).catch(() => {});
+  });
 }
 
 async function attach(input: HTMLInputElement): Promise<void> {
