@@ -8,7 +8,10 @@
 **/.styleci.yml export-ignore
 
 **/phpunit.xml export-ignore
+**/phpstan.neon export-ignore
 **/tests export-ignore
+**/screenshots export-ignore
+**/composer.lock export-ignore
 
 **/js/dist/**/* -diff
 **/js/dist/**/* linguist-generated
