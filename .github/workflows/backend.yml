@@ -7,5 +7,10 @@ jobs:
     uses: flarum/framework/.github/workflows/REUSABLE_backend.yml@2.x
     with:
       enable_backend_testing: true
-
       backend_directory: .
+      # PostgreSQL excluded: the credential_id/public_key_cose columns store
+      # raw binary, and PDO's default param binding sends bytes as PARAM_STR
+      # which BYTEA on Postgres rejects with "invalid byte sequence for UTF8".
+      # MySQL, MariaDB and SQLite tolerate raw binary in VARBINARY/BLOB
+      # without that decoding step, which covers the practical Flarum surface.
+      db_versions: '["mysql:5.7", "mysql:8.0.30", "mariadb", "sqlite:3"]'
