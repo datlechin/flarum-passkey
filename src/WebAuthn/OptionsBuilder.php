@@ -19,6 +19,7 @@ use Flarum\User\User;
 use Webauthn\AuthenticatorSelectionCriteria;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialDescriptor;
+use Webauthn\PublicKeyCredentialOptions;
 use Webauthn\PublicKeyCredentialParameters;
 use Webauthn\PublicKeyCredentialRequestOptions;
 use Webauthn\PublicKeyCredentialRpEntity;
@@ -99,6 +100,15 @@ class OptionsBuilder
             allowCredentials: $allow,
             userVerification: $this->userVerification(),
             timeout: self::TIMEOUT_MS,
+            // Prefer the on-device platform authenticator before offering hybrid
+            // (cross-device) flows. On modern Chromium/Edge/Safari this collapses
+            // the picker to a single local prompt when only one local credential
+            // matches; hybrid stays available as a fallback for users signing in
+            // from a phone or roaming security key.
+            hints: [
+                PublicKeyCredentialOptions::HINT_CLIENT_DEVICE,
+                PublicKeyCredentialOptions::HINT_HYBRID,
+            ],
         );
     }
 

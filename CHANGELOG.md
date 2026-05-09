@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1]
+
+### Changed
+
+- Login ceremony now sends `hints: ['client-device', 'hybrid']`. On modern Chromium, Edge and Safari this collapses the credential picker to a single local prompt when only one platform passkey matches the origin, while still leaving the cross-device hybrid flow as a fallback.
+
 ## [1.0.0]
 
 Initial release.
@@ -30,4 +36,5 @@ Initial release.
 - Optional integration with `flarum/gdpr`: passkeys are exported when a user requests their data, and revoked when the user is anonymized or deleted.
 - Domain events for extensibility: `PasskeyRegistered`, `PasskeyRevoked`, `PasskeyBulkRevoked`, `PasskeyUsed`, `PasskeyCounterRegression`. The standard `LoggedIn` event also fires on a successful passkey login.
 
+[1.0.1]: https://github.com/datlechin/flarum-passkey/releases/tag/v1.0.1
 [1.0.0]: https://github.com/datlechin/flarum-passkey/releases/tag/v1.0.0
