@@ -13,7 +13,6 @@ namespace Datlechin\Passkey\Tests\integration\api;
 
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Testing\integration\TestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 class WellKnownTest extends TestCase
 {
@@ -24,7 +23,7 @@ class WellKnownTest extends TestCase
         $this->extension('datlechin-passkey');
     }
 
-    #[Test]
+    /** @test */
     public function returns_empty_origins_by_default(): void
     {
         $response = $this->send($this->request('GET', '/.well-known/webauthn'));
@@ -36,7 +35,7 @@ class WellKnownTest extends TestCase
         $this->assertSame(['origins' => []], $payload);
     }
 
-    #[Test]
+    /** @test */
     public function reflects_configured_related_origins(): void
     {
         $this->prepareDatabase([]);

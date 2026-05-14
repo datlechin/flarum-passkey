@@ -86,7 +86,10 @@ class LoginController implements RequestHandlerInterface
         }
 
         $user = $passkey->user;
-        if ($user === null || $user->is_email_confirmed !== true) {
+        // Truthy check, not `!== true`: Flarum 1.x's User model does not cast
+        // `is_email_confirmed`, so it arrives as a raw tinyint (1/0) rather than
+        // a bool. This matches how core itself guards it (User::activate()).
+        if ($user === null || ! $user->is_email_confirmed) {
             throw new NotAuthenticatedException;
         }
         if (! $user->can('viewForum')) {

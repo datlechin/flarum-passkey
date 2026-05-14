@@ -13,11 +13,10 @@ namespace Datlechin\Passkey\Tests\integration;
 
 use Datlechin\Passkey\WebAuthn\AuthenticatorMetadata;
 use Flarum\Testing\integration\TestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 class AuthenticatorMetadataTest extends TestCase
 {
-    #[Test]
+    /** @test */
     public function known_aaguids_resolve_to_friendly_names(): void
     {
         $this->assertSame('iCloud Keychain', AuthenticatorMetadata::nameFor('adce0002-35bc-c60a-648b-0b25f1f05503'));
@@ -27,7 +26,7 @@ class AuthenticatorMetadataTest extends TestCase
         $this->assertSame('YubiKey 5 Series', AuthenticatorMetadata::nameFor('cb69481e-8ff7-4039-93ec-0a2729a154a8'));
     }
 
-    #[Test]
+    /** @test */
     public function lookup_is_case_insensitive(): void
     {
         $this->assertSame(
@@ -36,19 +35,19 @@ class AuthenticatorMetadataTest extends TestCase
         );
     }
 
-    #[Test]
+    /** @test */
     public function anonymous_aaguid_resolves_to_null(): void
     {
         $this->assertNull(AuthenticatorMetadata::nameFor('00000000-0000-0000-0000-000000000000'));
     }
 
-    #[Test]
+    /** @test */
     public function unknown_aaguid_resolves_to_null(): void
     {
         $this->assertNull(AuthenticatorMetadata::nameFor('11111111-2222-3333-4444-555555555555'));
     }
 
-    #[Test]
+    /** @test */
     public function null_or_empty_input_resolves_to_null(): void
     {
         $this->assertNull(AuthenticatorMetadata::nameFor(null));

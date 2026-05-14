@@ -16,9 +16,7 @@ use Datlechin\Passkey\Event\PasskeyBulkRevoked;
 use Flarum\Group\Group;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
-use Flarum\User\User;
 use Illuminate\Support\Arr;
-use PHPUnit\Framework\Attributes\Test;
 
 class BulkRevokeTest extends TestCase
 {
@@ -31,7 +29,7 @@ class BulkRevokeTest extends TestCase
         $this->extension('datlechin-passkey');
 
         $this->prepareDatabase([
-            User::class => [
+            'users' => [
                 $this->normalUser(),
                 ['id' => 3, 'username' => 'other', 'email' => 'other@example.com', 'is_email_confirmed' => 1, 'password' => '$2y$10$invalid'],
             ],
@@ -51,7 +49,7 @@ class BulkRevokeTest extends TestCase
         ]);
     }
 
-    #[Test]
+    /** @test */
     public function guest_cannot_bulk_revoke(): void
     {
         $response = $this->send($this->request('DELETE', '/api/passkey/bulk-revoke'));
@@ -59,7 +57,7 @@ class BulkRevokeTest extends TestCase
         $this->assertContains($response->getStatusCode(), [400, 401, 403]);
     }
 
-    #[Test]
+    /** @test */
     public function user_can_revoke_all_their_passkeys_in_one_call(): void
     {
         $captured = [];
@@ -91,7 +89,7 @@ class BulkRevokeTest extends TestCase
         $this->assertSame(2, $captured[0]->actor->id);
     }
 
-    #[Test]
+    /** @test */
     public function user_with_no_passkeys_gets_204_and_no_event(): void
     {
         $captured = 0;

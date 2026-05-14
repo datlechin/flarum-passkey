@@ -25,6 +25,7 @@ datlechin-passkey:
       description: Passkeys let you sign in without a password using your device or a hardware key.
       add_button: Add passkey
       bulk_revoke_button: Revoke all
+      invalid_device_name: The passkey name must be between 1 and 64 characters.
       add_modal:
         title: Add a passkey
         device_name_label: Name this passkey

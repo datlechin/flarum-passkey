@@ -11,7 +11,9 @@ Group.prototype.passkeyRequired = Model.attribute<boolean>('passkeyRequired');
 app.initializers.add('datlechin-passkey', () => {
   extendEditGroupModal();
 
-  app.registry
+  // Flarum 2.x renamed `app.extensionData` to `app.registry`; the
+  // `.for(...).registerSetting(...)` chain is otherwise identical.
+  app.extensionData
     .for('datlechin-passkey')
     .registerSetting({
       setting: 'datlechin-passkey.rp_id',

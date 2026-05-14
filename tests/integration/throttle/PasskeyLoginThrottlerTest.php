@@ -17,7 +17,6 @@ use Flarum\Testing\integration\TestCase;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\Repository;
 use Laminas\Diactoros\ServerRequest;
-use PHPUnit\Framework\Attributes\Test;
 
 class PasskeyLoginThrottlerTest extends TestCase
 {
@@ -29,7 +28,7 @@ class PasskeyLoginThrottlerTest extends TestCase
         $this->prepareDatabase([]);
     }
 
-    #[Test]
+    /** @test */
     public function it_only_acts_on_the_login_route(): void
     {
         $throttler = $this->make($limit = 5);
@@ -39,7 +38,7 @@ class PasskeyLoginThrottlerTest extends TestCase
         $this->assertNull($result);
     }
 
-    #[Test]
+    /** @test */
     public function it_allows_requests_below_the_limit(): void
     {
         $throttler = $this->make($limit = 3);
@@ -50,7 +49,7 @@ class PasskeyLoginThrottlerTest extends TestCase
         $this->assertFalse($throttler($request));
     }
 
-    #[Test]
+    /** @test */
     public function it_blocks_requests_at_or_above_the_limit(): void
     {
         $throttler = $this->make($limit = 2);
@@ -62,7 +61,7 @@ class PasskeyLoginThrottlerTest extends TestCase
         $this->assertTrue($throttler($request));
     }
 
-    #[Test]
+    /** @test */
     public function buckets_are_isolated_per_ip(): void
     {
         $throttler = $this->make($limit = 1);

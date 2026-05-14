@@ -1,4 +1,5 @@
 import { extend } from 'flarum/common/extend';
+import LogInModal from 'flarum/forum/components/LogInModal';
 import type Mithril from 'mithril';
 import { fetchLoginOptions, performAuthentication, submitLogin, isAutofillSupported, PasskeyClientError } from '../lib/webauthn';
 
@@ -15,7 +16,7 @@ import { fetchLoginOptions, performAuthentication, submitLogin, isAutofillSuppor
  * functional and the user never sees an error from this code path.
  */
 export default function setupConditionalUi(): void {
-  extend('flarum/forum/components/LogInModal', 'oncreate', function (_returnValue: void, ...args: unknown[]) {
+  extend(LogInModal.prototype, 'oncreate', function (_returnValue: void, ...args: unknown[]) {
     const vnode = args[0] as Mithril.VnodeDOM;
     const input = (vnode.dom as HTMLElement).querySelector<HTMLInputElement>('input[name="identification"]');
     if (!input) return;

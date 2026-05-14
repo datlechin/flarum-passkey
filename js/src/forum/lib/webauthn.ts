@@ -15,13 +15,21 @@ import app from 'flarum/forum/app';
  * credential is already enrolled). We translate those into a single shape.
  */
 export class PasskeyClientError extends Error {
+  // Declared as explicit fields rather than constructor parameter properties:
+  // the Flarum 1.x build toolchain (flarum-webpack-config 2.x and its babel
+  // preset) does not transform `public readonly` in a constructor signature.
+  public readonly kind: 'unsupported' | 'cancelled' | 'invalid_state' | 'security' | 'unknown';
+  public readonly cause?: unknown;
+
   constructor(
-    public readonly kind: 'unsupported' | 'cancelled' | 'invalid_state' | 'security' | 'unknown',
+    kind: 'unsupported' | 'cancelled' | 'invalid_state' | 'security' | 'unknown',
     message: string,
-    public readonly cause?: unknown
+    cause?: unknown
   ) {
     super(message);
     this.name = 'PasskeyClientError';
+    this.kind = kind;
+    this.cause = cause;
   }
 }
 

@@ -1,7 +1,8 @@
 import app from 'flarum/forum/app';
 import Component, { ComponentAttrs } from 'flarum/common/Component';
 import Button from 'flarum/common/components/Button';
-import Icon from 'flarum/common/components/Icon';
+// Flarum 1.x ships `icon` as a helper function; the `Icon` component is 2.x-only.
+import icon from 'flarum/common/helpers/icon';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import humanTime from 'flarum/common/helpers/humanTime';
 import extractText from 'flarum/common/utils/extractText';
@@ -66,9 +67,7 @@ export default class PasskeyList extends Component<IPasskeyListAttrs> {
 
     items.add(
       'icon',
-      <div className="PasskeyList-item-icon">
-        <Icon name="fas fa-key" />
-      </div>,
+      <div className="PasskeyList-item-icon">{icon('fas fa-key')}</div>,
       50
     );
 

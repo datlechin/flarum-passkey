@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    convertDeprecationsToExceptions is false because Flarum 1.x runs on Laravel 8
+    (illuminate/* ^8.0), which is not free of PHP 8.4 implicit-nullable
+    deprecations. Third-party deprecation notices should not fail the suite.
+-->
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
     backupGlobals="false"
-    cacheDirectory=".phpunit.cache"
-    backupStaticProperties="false"
+    backupStaticAttributes="false"
     colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    convertDeprecationsToExceptions="false"
     processIsolation="true"
     stopOnFailure="false"
 >
-    <source>
+    <coverage>
         <include>
             <directory suffix=".php">../src/</directory>
         </include>
-    </source>
+    </coverage>
     <testsuites>
         <testsuite name="Flarum Integration Tests">
             <directory suffix="Test.php">./integration</directory>
-             <exclude>./integration/tmp</exclude>
+            <exclude>./integration/tmp</exclude>
         </testsuite>
     </testsuites>
 </phpunit>

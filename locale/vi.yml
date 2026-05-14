@@ -25,6 +25,7 @@ datlechin-passkey:
       description: Passkey cho phép bạn đăng nhập không cần mật khẩu, dùng thiết bị hoặc khóa cứng.
       add_button: Thêm passkey
       bulk_revoke_button: Thu hồi tất cả
+      invalid_device_name: Tên passkey phải từ 1 đến 64 ký tự.
       add_modal:
         title: Thêm passkey
         device_name_label: Đặt tên cho passkey

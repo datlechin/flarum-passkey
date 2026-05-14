@@ -14,8 +14,6 @@ namespace Datlechin\Passkey\Tests\integration;
 use Flarum\Group\Group;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
-use Flarum\User\User;
-use PHPUnit\Framework\Attributes\Test;
 
 class GroupPasskeyRequiredTest extends TestCase
 {
@@ -28,7 +26,7 @@ class GroupPasskeyRequiredTest extends TestCase
         $this->extension('datlechin-passkey');
     }
 
-    #[Test]
+    /** @test */
     public function migration_adds_the_column_with_a_safe_default(): void
     {
         $this->prepareDatabase([]);
@@ -46,7 +44,7 @@ class GroupPasskeyRequiredTest extends TestCase
         $this->assertFalse((bool) $member->passkey_required);
     }
 
-    #[Test]
+    /** @test */
     public function flag_persists_via_raw_update(): void
     {
         $this->prepareDatabase([]);
@@ -60,11 +58,11 @@ class GroupPasskeyRequiredTest extends TestCase
         $this->assertSame(1, (int) $row->passkey_required);
     }
 
-    #[Test]
+    /** @test */
     public function non_admin_cannot_flip_the_flag_via_api(): void
     {
         $this->prepareDatabase([
-            User::class => [$this->normalUser()],
+            'users' => [$this->normalUser()],
         ]);
 
         $response = $this->send($this->request('PATCH', '/api/groups/'.Group::MEMBER_ID, [
@@ -80,5 +78,29 @@ class GroupPasskeyRequiredTest extends TestCase
 
         $this->assertContains($response->getStatusCode(), [403, 422]);
         $this->assertFalse((bool) Group::find(Group::MEMBER_ID)->passkey_required);
+    }
+
+    /** @test */
+    public function admin_can_flip_the_flag_via_api(): void
+    {
+        $this->prepareDatabase([]);
+
+        $response = $this->send($this->request('PATCH', '/api/groups/'.Group::MEMBER_ID, [
+            'authenticatedAs' => 1,
+            'json' => [
+                'data' => [
+                    'type' => 'groups',
+                    'id' => (string) Group::MEMBER_ID,
+                    'attributes' => ['passkeyRequired' => true],
+                ],
+            ],
+        ]));
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertTrue((bool) Group::find(Group::MEMBER_ID)->passkey_required);
+
+        // Serializer round-trips it back on the same response.
+        $payload = json_decode($response->getBody()->getContents(), true);
+        $this->assertTrue($payload['data']['attributes']['passkeyRequired']);
     }
 }

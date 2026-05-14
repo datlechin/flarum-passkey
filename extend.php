@@ -12,7 +12,10 @@
 namespace Datlechin\Passkey;
 
 use Datlechin\Passkey\Access\PasskeyPolicy;
-use Datlechin\Passkey\Api\Resource\PasskeyResource;
+use Datlechin\Passkey\Api\Controller\DeletePasskeyController;
+use Datlechin\Passkey\Api\Controller\ListPasskeysController;
+use Datlechin\Passkey\Api\Controller\UpdatePasskeyController;
+use Datlechin\Passkey\Api\Serializer\PasskeySerializer;
 use Datlechin\Passkey\Controller\BulkRevokeController;
 use Datlechin\Passkey\Controller\LoginController;
 use Datlechin\Passkey\Controller\LoginOptionsController;
@@ -22,19 +25,18 @@ use Datlechin\Passkey\Controller\WellKnownController;
 use Datlechin\Passkey\Event\PasskeyBulkRevoked;
 use Datlechin\Passkey\Event\PasskeyCounterRegression;
 use Datlechin\Passkey\Event\PasskeyRevoked;
+use Datlechin\Passkey\Listener\SaveGroupPasskeyRequired;
 use Datlechin\Passkey\Listener\SendBackupStatusChangedEmail;
 use Datlechin\Passkey\Listener\SendBulkRevokedEmail;
 use Datlechin\Passkey\Listener\SendCounterRegressionEmail;
 use Datlechin\Passkey\Listener\SendRevokedEmail;
 use Datlechin\Passkey\Model\Passkey;
 use Datlechin\Passkey\Throttle\PasskeyLoginThrottler;
-use Flarum\Api\Resource\GroupResource;
-use Flarum\Api\Schema;
+use Flarum\Api\Serializer\GroupSerializer;
 use Flarum\Extend;
+use Flarum\Group\Event\Saving as GroupSaving;
 use Flarum\Group\Group;
-use Flarum\User\Event\LoggedIn;
 use Flarum\User\User;
-use Tobyz\JsonApiServer\Context as JsonApiContext;
 use Webauthn\Event\BackupStatusChangedEvent;
 
 return [
@@ -56,7 +58,14 @@ return [
         ->post('/passkey/login', 'datlechin-passkey.login', LoginController::class)
         ->get('/passkey/registration-options', 'datlechin-passkey.registration-options', RegistrationOptionsController::class)
         ->post('/passkey/registration', 'datlechin-passkey.registration', RegistrationController::class)
-        ->delete('/passkey/bulk-revoke', 'datlechin-passkey.bulk-revoke', BulkRevokeController::class),
+        ->delete('/passkey/bulk-revoke', 'datlechin-passkey.bulk-revoke', BulkRevokeController::class)
+        // The 2.x build expressed these three as an Extend\ApiResource; on 1.x
+        // they are plain controllers behind the same /api/passkeys URLs, so the
+        // frontend store (app.store.find('passkeys'), passkey.save/delete) is
+        // unchanged. The plural path keeps clear of the static /passkey/* siblings.
+        ->get('/passkeys', 'datlechin-passkey.passkeys.index', ListPasskeysController::class)
+        ->patch('/passkeys/{id}', 'datlechin-passkey.passkeys.update', UpdatePasskeyController::class)
+        ->delete('/passkeys/{id}', 'datlechin-passkey.passkeys.delete', DeletePasskeyController::class),
 
     // The W3C related-origins document must be served at /.well-known/webauthn
     // on the apex of the relying party origin. We register it on the forum
@@ -87,8 +96,6 @@ return [
             $document->payload['datlechinPasskey'] = ['passkeyRequired' => true];
         }),
 
-    (new Extend\ApiResource(PasskeyResource::class)),
-
     (new Extend\Policy())
         ->modelPolicy(Passkey::class, PasskeyPolicy::class),
 
@@ -99,7 +106,11 @@ return [
         ->listen(PasskeyRevoked::class, SendRevokedEmail::class)
         ->listen(PasskeyBulkRevoked::class, SendBulkRevokedEmail::class)
         ->listen(PasskeyCounterRegression::class, SendCounterRegressionEmail::class)
-        ->listen(BackupStatusChangedEvent::class, SendBackupStatusChangedEmail::class),
+        ->listen(BackupStatusChangedEvent::class, SendBackupStatusChangedEmail::class)
+        // Persists the `passkeyRequired` group attribute. Group\Event\Saving
+        // fires from both the create and edit group handlers, so this single
+        // listener covers what the 2.x GroupResource field did for both.
+        ->listen(GroupSaving::class, SaveGroupPasskeyRequired::class),
 
     (new Extend\Settings())
         ->default('datlechin-passkey.rp_id', '')
@@ -113,12 +124,11 @@ return [
         ->cast('passkey_required', 'bool')
         ->default('passkey_required', false),
 
-    (new Extend\ApiResource(GroupResource::class))
-        ->fields(fn () => [
-            Schema\Boolean::make('passkeyRequired')
-                ->property('passkey_required')
-                ->writable(fn ($model, JsonApiContext $context) => $context->getActor()->isAdmin()),
-        ]),
+    // Read side of the `passkeyRequired` group attribute (the write side is the
+    // SaveGroupPasskeyRequired listener above). 2.x did both in one ApiResource
+    // field; 1.x splits serialization and persistence across two extenders.
+    (new Extend\ApiSerializer(GroupSerializer::class))
+        ->attribute('passkeyRequired', fn ($serializer, $group) => (bool) $group->passkey_required),
 
     (new Extend\Model(User::class))
         ->hasMany('passkeys', Passkey::class, 'user_id'),

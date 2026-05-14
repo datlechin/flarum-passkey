@@ -12,11 +12,11 @@
 namespace Datlechin\Passkey\Tests\integration\api;
 
 use Carbon\Carbon;
+use Datlechin\Passkey\Event\PasskeyRevoked;
+use Datlechin\Passkey\Model\Passkey;
 use Flarum\Group\Group;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
-use Flarum\User\User;
-use PHPUnit\Framework\Attributes\Test;
 
 class ListPasskeysTest extends TestCase
 {
@@ -29,7 +29,7 @@ class ListPasskeysTest extends TestCase
         $this->extension('datlechin-passkey');
 
         $this->prepareDatabase([
-            User::class => [
+            'users' => [
                 $this->normalUser(),
                 ['id' => 3, 'username' => 'other', 'email' => 'other@example.com', 'is_email_confirmed' => 1, 'password' => '$2y$10$invalid'],
             ],
@@ -70,10 +70,14 @@ class ListPasskeysTest extends TestCase
                     'updated_at' => Carbon::now(),
                 ],
             ],
+            'login_providers' => [
+                ['user_id' => 2, 'provider' => 'passkey', 'identifier' => 'cred-mac-1234567890abcdef', 'created_at' => Carbon::now(), 'last_login_at' => Carbon::now()],
+                ['user_id' => 3, 'provider' => 'passkey', 'identifier' => 'cred-iphone-fedcba0987654321', 'created_at' => Carbon::now(), 'last_login_at' => Carbon::now()],
+            ],
         ]);
     }
 
-    #[Test]
+    /** @test */
     public function guest_cannot_list_passkeys(): void
     {
         $response = $this->send($this->request('GET', '/api/passkeys'));
@@ -81,7 +85,7 @@ class ListPasskeysTest extends TestCase
         $this->assertSame(401, $response->getStatusCode());
     }
 
-    #[Test]
+    /** @test */
     public function user_only_sees_own_passkeys(): void
     {
         $response = $this->send($this->request('GET', '/api/passkeys', [
@@ -97,7 +101,7 @@ class ListPasskeysTest extends TestCase
         $this->assertSame('My MacBook', $payload['data'][0]['attributes']['deviceName']);
     }
 
-    #[Test]
+    /** @test */
     public function user_cannot_delete_someone_elses_passkey(): void
     {
         $response = $this->send($this->request('DELETE', '/api/passkeys/2', [
@@ -107,7 +111,48 @@ class ListPasskeysTest extends TestCase
         $this->assertContains($response->getStatusCode(), [403, 404]);
     }
 
-    #[Test]
+    /** @test */
+    public function user_can_revoke_own_passkey(): void
+    {
+        $captured = [];
+        $this->app()->getContainer()->make('events')->listen(
+            PasskeyRevoked::class,
+            function (PasskeyRevoked $event) use (&$captured) {
+                $captured[] = $event;
+            }
+        );
+
+        $response = $this->send($this->request('DELETE', '/api/passkeys/1', [
+            'authenticatedAs' => 2,
+        ]));
+
+        $this->assertSame(204, $response->getStatusCode());
+
+        // The passkey row is gone, and its login_providers link was cascaded
+        // away by the Passkey model's `deleted` boot hook.
+        $this->assertNull(Passkey::find(1));
+        $this->assertSame(0, $this->providerCount('cred-mac-1234567890abcdef'));
+
+        // The other user's credential is untouched.
+        $this->assertNotNull(Passkey::find(2));
+        $this->assertSame(1, $this->providerCount('cred-iphone-fedcba0987654321'));
+
+        // PasskeyRevoked fired exactly once, naming the owner and the actor.
+        $this->assertCount(1, $captured);
+        $this->assertSame(2, $captured[0]->owner->id);
+        $this->assertSame(2, $captured[0]->actor->id);
+    }
+
+    private function providerCount(string $identifier): int
+    {
+        return $this->app()->getContainer()->make('db')
+            ->table('login_providers')
+            ->where('provider', 'passkey')
+            ->where('identifier', $identifier)
+            ->count();
+    }
+
+    /** @test */
     public function user_can_rename_own_passkey(): void
     {
         $response = $this->send($this->request('PATCH', '/api/passkeys/1', [
@@ -126,5 +171,40 @@ class ListPasskeysTest extends TestCase
         $payload = json_decode($response->getBody()->getContents(), true);
 
         $this->assertSame('Renamed', $payload['data']['attributes']['deviceName']);
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider invalidDeviceNames
+     */
+    public function rename_rejects_an_out_of_range_device_name(mixed $deviceName): void
+    {
+        $response = $this->send($this->request('PATCH', '/api/passkeys/1', [
+            'authenticatedAs' => 2,
+            'json' => [
+                'data' => [
+                    'type' => 'passkeys',
+                    'id' => '1',
+                    'attributes' => ['deviceName' => $deviceName],
+                ],
+            ],
+        ]));
+
+        // Mirrors the 2.x Schema\Str minLength(1)/maxLength(64) contract.
+        $this->assertSame(422, $response->getStatusCode());
+
+        // The rejected write must not have touched the stored name.
+        $this->assertSame('My MacBook', Passkey::find(1)->device_name);
+    }
+
+    public static function invalidDeviceNames(): array
+    {
+        return [
+            'empty' => [''],
+            'whitespace only' => ['   '],
+            'longer than 64 chars' => [str_repeat('a', 65)],
+            'non-string' => [['not', 'a', 'string']],
+        ];
     }
 }

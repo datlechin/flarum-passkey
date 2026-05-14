@@ -1,18 +1,18 @@
 import app from 'flarum/forum/app';
-import FormModal, { IFormModalAttrs } from 'flarum/common/components/FormModal';
-import Form from 'flarum/common/components/Form';
+// Flarum 1.x has no FormModal/Form split — see the note in AddPasskeyModal.
+import Modal, { IInternalModalAttrs } from 'flarum/common/components/Modal';
 import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
 import Stream from 'flarum/common/utils/Stream';
 import type Mithril from 'mithril';
 import type Passkey from '../../common/models/Passkey';
 
-export interface IRenamePasskeyModalAttrs extends IFormModalAttrs {
+export interface IRenamePasskeyModalAttrs extends IInternalModalAttrs {
   passkey: Passkey;
   onSuccess?: () => void;
 }
 
-export default class RenamePasskeyModal extends FormModal<IRenamePasskeyModalAttrs> {
+export default class RenamePasskeyModal extends Modal<IRenamePasskeyModalAttrs> {
   // Streams must be created in oninit, not as class field initializers,
   // because Mithril sets `this.attrs` only after construction. A field
   // initializer on `this.attrs.passkey` runs first and throws.
@@ -34,7 +34,7 @@ export default class RenamePasskeyModal extends FormModal<IRenamePasskeyModalAtt
   content(): Mithril.Children {
     return (
       <div className="Modal-body">
-        <Form className="Form--centered">{this.fields().toArray()}</Form>
+        <div className="Form Form--centered">{this.fields().toArray()}</div>
       </div>
     );
   }

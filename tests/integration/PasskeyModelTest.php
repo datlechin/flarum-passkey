@@ -13,7 +13,6 @@ namespace Datlechin\Passkey\Tests\integration;
 
 use Datlechin\Passkey\Model\Passkey;
 use Flarum\Testing\integration\TestCase;
-use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Uid\Uuid;
 use Webauthn\TrustPath\EmptyTrustPath;
 
@@ -27,7 +26,7 @@ class PasskeyModelTest extends TestCase
         $this->prepareDatabase([]);
     }
 
-    #[Test]
+    /** @test */
     public function base64_url_round_trips_arbitrary_bytes(): void
     {
         $samples = [
@@ -48,7 +47,7 @@ class PasskeyModelTest extends TestCase
         }
     }
 
-    #[Test]
+    /** @test */
     public function to_credential_record_round_trip(): void
     {
         $rawCredentialId = random_bytes(32);
@@ -81,7 +80,7 @@ class PasskeyModelTest extends TestCase
         $this->assertSame('42', $record->userHandle);
     }
 
-    #[Test]
+    /** @test */
     public function sync_from_credential_record_updates_mutable_fields(): void
     {
         $passkey = new Passkey();

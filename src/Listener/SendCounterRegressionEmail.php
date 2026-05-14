@@ -12,10 +12,10 @@
 namespace Datlechin\Passkey\Listener;
 
 use Datlechin\Passkey\Event\PasskeyCounterRegression;
-use Flarum\Locale\TranslatorInterface;
-use Flarum\Mail\Job\SendInformationalEmailJob;
+use Flarum\Mail\Job\SendRawEmailJob;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Queue\Queue;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SendCounterRegressionEmail
 {
@@ -47,12 +47,8 @@ class SendCounterRegressionEmail
             'forum' => $forumTitle,
         ], null, $locale);
 
-        $this->queue->push(new SendInformationalEmailJob(
-            email: $owner->email,
-            displayName: $owner->display_name,
-            subject: $subject,
-            body: $body,
-            forumTitle: $forumTitle,
-        ));
+        // Flarum 1.x has no SendInformationalEmailJob (the HTML-templated job is
+        // 2.x-only); SendRawEmailJob sends the already-translated plain-text body.
+        $this->queue->push(new SendRawEmailJob($owner->email, $subject, $body));
     }
 }
