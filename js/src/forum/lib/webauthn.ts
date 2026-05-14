@@ -21,11 +21,7 @@ export class PasskeyClientError extends Error {
   public readonly kind: 'unsupported' | 'cancelled' | 'invalid_state' | 'security' | 'unknown';
   public readonly cause?: unknown;
 
-  constructor(
-    kind: 'unsupported' | 'cancelled' | 'invalid_state' | 'security' | 'unknown',
-    message: string,
-    cause?: unknown
-  ) {
+  constructor(kind: 'unsupported' | 'cancelled' | 'invalid_state' | 'security' | 'unknown', message: string, cause?: unknown) {
     super(message);
     this.name = 'PasskeyClientError';
     this.kind = kind;

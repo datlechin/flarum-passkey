@@ -8,3 +8,11 @@ jobs:
     with:
       enable_backend_testing: true
       backend_directory: .
+      # The extension requires php ^8.3 (web-auth/webauthn-lib ^5.3); the
+      # reusable workflow's default matrix starts at 7.3, where composer
+      # install can't resolve — and fail-fast then cancels the rest.
+      php_versions: '["8.3", "8.4", "8.5"]'
+      # Flarum 1.x runs on Laravel 8, which is not free of PHP 8.4+
+      # implicit-nullable deprecations; left at E_ALL they pollute PHPUnit's
+      # process-isolation output and break otherwise-passing tests.
+      php_ini_values: 'error_reporting=E_ALL & ~E_DEPRECATED'

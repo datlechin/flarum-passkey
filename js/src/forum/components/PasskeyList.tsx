@@ -65,11 +65,7 @@ export default class PasskeyList extends Component<IPasskeyListAttrs> {
   protected itemContents(passkey: Passkey): ItemList<Mithril.Children> {
     const items = new ItemList<Mithril.Children>();
 
-    items.add(
-      'icon',
-      <div className="PasskeyList-item-icon">{icon('fas fa-key')}</div>,
-      50
-    );
+    items.add('icon', <div className="PasskeyList-item-icon">{icon('fas fa-key')}</div>, 50);
 
     items.add('info', <div className="PasskeyList-item-info">{this.itemInfo(passkey).toArray()}</div>, 40);
 
