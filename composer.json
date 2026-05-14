@@ -35,7 +35,7 @@
         }
     ],
     "require": {
-        "php": "^8.3",
+        "php": "^8.2",
         "flarum/core": "^1.8.0",
         "web-auth/webauthn-lib": "^5.3"
     },
