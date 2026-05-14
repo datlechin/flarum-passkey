@@ -1,11 +1,11 @@
-import FormModal, { IFormModalAttrs } from 'flarum/common/components/FormModal';
+import Modal, { IInternalModalAttrs } from 'flarum/common/components/Modal';
 import ItemList from 'flarum/common/utils/ItemList';
 import Stream from 'flarum/common/utils/Stream';
 import type Mithril from 'mithril';
-export interface IAddPasskeyModalAttrs extends IFormModalAttrs {
+export interface IAddPasskeyModalAttrs extends IInternalModalAttrs {
     onSuccess?: () => void;
 }
-export default class AddPasskeyModal extends FormModal<IAddPasskeyModalAttrs> {
+export default class AddPasskeyModal extends Modal<IAddPasskeyModalAttrs> {
     deviceName: Stream<string>;
     oninit(vnode: Mithril.Vnode<IAddPasskeyModalAttrs, this>): void;
     className(): string;
