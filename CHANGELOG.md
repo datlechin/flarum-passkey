@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0]
+
+First release on the Flarum 1.x line. The earlier `v1.0.x` tags were
+Flarum 2.x-only; `v1.1.0` and onward on the `1.x` branch target
+`flarum/core: ^1.8`. The Flarum 2.x line continues under `v2.0.0+`
+on `main`.
+
+### Added
+
+- Flarum 1.x (`^1.8`) compatibility. The full feature set of the
+  Flarum 2.x line (`v1.0.x`) runs on Flarum 1.x sites; `composer
+  require datlechin/flarum-passkey` on a 1.x install resolves to
+  this branch automatically.
+
+### Changed
+
+- Minimum PHP is now `^8.2` (was `^8.3` on the 2.x line), matching
+  `web-auth/webauthn-lib`'s actual floor.
+- Notification emails (`PasskeyRevoked`, `PasskeyBulkRevoked`,
+  `PasskeyCounterRegression`, `BackupStatusChangedEvent`) are sent
+  as plain text on Flarum 1.x — the HTML "informational" email
+  template used on Flarum 2.x does not exist on 1.x. Subject and
+  body content are unchanged; only the wrapping differs.
+
 ## [1.0.1]
 
 ### Changed
@@ -36,5 +60,6 @@ Initial release.
 - Optional integration with `flarum/gdpr`: passkeys are exported when a user requests their data, and revoked when the user is anonymized or deleted.
 - Domain events for extensibility: `PasskeyRegistered`, `PasskeyRevoked`, `PasskeyBulkRevoked`, `PasskeyUsed`, `PasskeyCounterRegression`. The standard `LoggedIn` event also fires on a successful passkey login.
 
+[1.1.0]: https://github.com/datlechin/flarum-passkey/releases/tag/v1.1.0
 [1.0.1]: https://github.com/datlechin/flarum-passkey/releases/tag/v1.0.1
 [1.0.0]: https://github.com/datlechin/flarum-passkey/releases/tag/v1.0.0
