@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0]
+
+Version-line realignment. Extension major now tracks Flarum core
+major, so the version numbers stop lying about what they target:
+
+- `v2.x` (this line, on `main`) — for **Flarum 2.x** sites.
+- `v1.x` (on the new `1.x` branch) — for **Flarum 1.x** sites.
+
+No functional changes vs `v1.0.1` (which was, despite its number,
+also a Flarum 2.x release). Existing installs locked to `^1.0` will
+not auto-update across the major boundary; widen the constraint to
+`^2.0` (or `^1.0 || ^2.0`) to follow this line going forward. Flarum
+1.x users should require `^1.0` — composer resolves it to the new
+`1.x` branch automatically (see `[1.1.0]` on that branch's CHANGELOG).
+
+### Changed
+
+- `branch-alias`: `dev-main` now aliases to `2.x-dev` (was `1.x-dev`),
+  matching the actual core-compatibility line.
+
+### Removed
+
+- `@flarum/jest-config` and the empty `js/tests/`, `jest.config.cjs`,
+  `tsconfig.test.json` scaffolding. The package was never wired in
+  (`frontendTesting: false`, CI `enable_tests: false`); removing it
+  drops the transitive `@tootallnate/once` advisory
+  (`GHSA-vpq2-c234-7xj6`, low severity, dependabot alert #1). No
+  runtime impact; the webpack bundle is byte-identical.
+
 ## [1.0.1]
 
 ### Changed
@@ -36,5 +65,6 @@ Initial release.
 - Optional integration with `flarum/gdpr`: passkeys are exported when a user requests their data, and revoked when the user is anonymized or deleted.
 - Domain events for extensibility: `PasskeyRegistered`, `PasskeyRevoked`, `PasskeyBulkRevoked`, `PasskeyUsed`, `PasskeyCounterRegression`. The standard `LoggedIn` event also fires on a successful passkey login.
 
+[2.0.0]: https://github.com/datlechin/flarum-passkey/releases/tag/v2.0.0
 [1.0.1]: https://github.com/datlechin/flarum-passkey/releases/tag/v1.0.1
 [1.0.0]: https://github.com/datlechin/flarum-passkey/releases/tag/v1.0.0
